@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { cn } from "@/lib/utils";
-import { vapi } from "@/lib/vapi.sdk";
 import { interviewer } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
+import { cn } from "@/lib/utils";
+import { vapi } from "@/lib/vapi.sdk";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
@@ -146,7 +146,7 @@ const Agent = ({
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-8 w-full">
       <div className="call-view">
         {/* AI Interviewer Card */}
         <div className="card-interviewer">
@@ -156,11 +156,12 @@ const Agent = ({
               alt="profile-image"
               width={65}
               height={54}
-              className="object-cover"
+              className="object-cover w-16 h-16 sm:w-20 sm:h-20"
+              priority
             />
             {isSpeaking && <span className="animate-speak" />}
           </div>
-          <h3>AI Interviewer</h3>
+          <h3 className="text-lg sm:text-xl">AI Interviewer</h3>
         </div>
 
         {/* User Profile Card */}
@@ -171,9 +172,10 @@ const Agent = ({
               alt="profile-image"
               width={539}
               height={539}
-              className="rounded-full object-cover size-[120px]"
+              className="rounded-full object-cover w-24 h-24 sm:w-32 sm:h-32"
+              priority
             />
-            <h3>{userName}</h3>
+            <h3 className="text-lg sm:text-xl">{userName}</h3>
           </div>
         </div>
       </div>
@@ -185,7 +187,7 @@ const Agent = ({
               key={lastMessage}
               className={cn(
                 "transition-opacity duration-500 opacity-0",
-                "animate-fadeIn opacity-100"
+                "animate-fadeIn opacity-100 text-base sm:text-lg"
               )}
             >
               {lastMessage}
@@ -216,7 +218,7 @@ const Agent = ({
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

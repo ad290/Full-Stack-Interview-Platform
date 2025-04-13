@@ -1,24 +1,42 @@
-import Link from "next/link";
 import Image from "next/image";
-import { ReactNode } from "react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ReactNode } from "react";
 
-import { isAuthenticated } from "@/lib/actions/auth.action";
+import ProfileDropdown from "@/components/ProfileDropdown";
+import { getCurrentUser, isAuthenticated } from "@/lib/actions/auth.action";
 
 const Layout = async ({ children }: { children: ReactNode }) => {
   const isUserAuthenticated = await isAuthenticated();
-  if (!isUserAuthenticated) redirect("/sign-in");
+  const user = await getCurrentUser();
+
+  // Handle authentication redirects
+  if (!isUserAuthenticated || !user) {
+    redirect("/sign-in");
+  }
 
   return (
-    <div className="root-layout">
-      <nav>
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="MockMate Logo" width={38} height={32} />
-          <h2 className="text-primary-100">PrepWise</h2>
+    <div className="root-layout bg-gray-950 min-h-screen">
+      <nav className="flex justify-between items-center px-4 py-3 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800/50 sticky top-0 z-50">
+        <Link href="/" className="flex items-center gap-2 group">
+          <Image
+            src="/logo.svg"
+            alt="MockMate Logo"
+            width={38}
+            height={32}
+            className="group-hover:scale-110 transition-transform duration-300"
+            priority
+          />
+          <h2 className="text-primary-100 group-hover:text-white transition-colors duration-300">
+            SharpPrep
+          </h2>
         </Link>
+        <ProfileDropdown user={user} />
       </nav>
 
-      {children}
+      <main className="container mx-auto px-4 py-6 text-gray-100">
+        {children}
+      </main>
     </div>
   );
 };

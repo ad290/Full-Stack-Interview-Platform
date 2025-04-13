@@ -1,21 +1,21 @@
 "use client";
 
-import { z } from "zod";
-import Link from "next/link";
-import Image from "next/image";
-import { toast } from "sonner";
 import { auth } from "@/firebase/client";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
-import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 
 import { signIn, signUp } from "@/lib/actions/auth.action";
 import FormField from "./FormField";
@@ -95,6 +95,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
   };
 
+  const handleGuestCredentials = () => {
+    form.setValue("email", "guestuser01@gmail.com");
+    form.setValue("password", "12345678");
+  };
+
   const isSignIn = type === "sign-in";
 
   return (
@@ -102,10 +107,12 @@ const AuthForm = ({ type }: { type: FormType }) => {
       <div className="flex flex-col gap-6 card py-14 px-10">
         <div className="flex flex-row gap-2 justify-center">
           <Image src="/logo.svg" alt="logo" height={32} width={38} />
-          <h2 className="text-primary-100">PrepWise</h2>
+          <h2 className="text-primary-100">SharpPrep</h2>
         </div>
 
-        <h3>Practice job interviews with AI</h3>
+        <h3 className="text-center text-xl font-semibold">
+          Practice job interviews with AI
+        </h3>
 
         <Form {...form}>
           <form
@@ -137,6 +144,17 @@ const AuthForm = ({ type }: { type: FormType }) => {
               placeholder="Enter your password"
               type="password"
             />
+
+            {isSignIn && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full text-sm text-gray-400 hover:text-gray-300 hover:bg-gray-800/50 transition-colors duration-200"
+                onClick={handleGuestCredentials}
+              >
+                Use Guest User Credentials
+              </Button>
+            )}
 
             <Button className="btn" type="submit">
               {isSignIn ? "Sign In" : "Create an Account"}
